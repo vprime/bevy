@@ -39,6 +39,7 @@ use gltf::{
 };
 use serde::Deserialize;
 use std::{collections::VecDeque, path::Path};
+use gltf::animation::Interpolation;
 use thiserror::Error;
 
 /// An error that occurs when loading a glTF file.
@@ -144,10 +145,11 @@ async fn load_gltf<'a, 'b>(
             for channel in animation.channels() {
                 match channel.sampler().interpolation() {
                     gltf::animation::Interpolation::Linear => (),
-                    other => warn!(
-                        "Animation interpolation {:?} is not supported, will use linear",
-                        other
-                    ),
+                    // other => warn!(
+                    //     "Animation interpolation {:?} is not supported, will use linear",
+                    //     other
+                    // ),
+                    _ => {}
                 };
                 let node = channel.target().node();
                 let reader = channel.reader(|buffer| Some(&buffer_data[buffer.index()]));
